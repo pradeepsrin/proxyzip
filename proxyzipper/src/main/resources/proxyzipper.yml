@@ -1,0 +1,30 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8090
+  adminConnectors:
+    - type: http
+      port: 8091
+
+zipper:
+    type: headerBased
+    pageKeyHeader: X-V4-PageID
+    preCallSensitiveDataHeader: X-PCI-Request-Body
+    postCallSensitiveDataHeader: X-PCI-Response-Body
+    preCallSensitiveDataMaskedHeader: X-PCI-Request-Body-Masked
+    postCallSensitiveDataMaskedHeader: X-PCI-Response-Body-Masked
+    proxyTo: http://localhost:8090
+
+zips:
+  - pageKey : pwd
+    pre:
+      httpMethod: POST
+      relativePath: /sensitive/save_card
+      basePath: http://localhost:8090
+    post:
+      httpMethod: POST
+      relativePath: /sensitive/fetch_pgparams
+      basePath: http://localhost:8090
+
+
+
